@@ -24,7 +24,7 @@ COPY ./src ./src
 RUN ./mvnw clean install -DskipTests
 
 # Unpacking the jar file and debug step
-RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../target/*.jar)
+RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar) && ls -l target/dependency
 
 # Base image
 FROM eclipse-temurin:17-jre-alpine as runtime
