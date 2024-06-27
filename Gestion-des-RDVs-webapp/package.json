@@ -71,9 +71,14 @@
     "styled-components": "^6.1.1",
     "xlsx": "^0.18.5"
   },
+  "devDependencies": {
+    "env-cmd": "^10.1.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:qa": "env-cmd -f .env.qa react-scripts build",
+    "build:prod": "env-cmd -f .env.prod react-scripts build",
     "build-local": "PUBLIC_URL=./ react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

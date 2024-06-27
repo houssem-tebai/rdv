@@ -6,7 +6,7 @@ services:
       context: ./Gestion-des-RDVs-webapi
       dockerfile: Dockerfile
     ports:
-      - "8082:8080"
+      - "8080:8080"
     depends_on:
       - db
   webapp:
@@ -14,7 +14,7 @@ services:
       context: ./Gestion-des-RDVs-webapp
       dockerfile: Dockerfile
     ports:
-      - "8081:80"
+      - "80:80"
     depends_on:
       - webapi
     environment:
