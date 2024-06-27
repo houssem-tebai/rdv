@@ -39,10 +39,10 @@ USER esprit
 ARG DEPENDENCY=/opt/app/target/dependency
 
 # Copy unpacked jar from builder image
-COPY --from=builder ${DEPENDENCY}/BOOT-INF/lib /opt/app/lib
 COPY --from=builder ${DEPENDENCY}/META-INF /opt/app/META-INF
-COPY --from=builder ${DEPENDENCY}/BOOT-INF/classes /opt/app
-
+COPY --from=builder ${DEPENDENCY}/application-qa.properties /opt/app/application-qa.properties
+COPY --from=builder ${DEPENDENCY}/application.properties /opt/app/application.properties
+COPY --from=builder ${DEPENDENCY}/com /opt/app/com
 
 # Run the application
-ENTRYPOINT ["java","-cp","opt/app:opt/app/lib/*","-Dspring.config.location=/opt/app/application-qa.properties","com.DSI.springjwt.SpringBootSecurityJwtApplication"]
+ENTRYPOINT ["java","-cp","opt/app:opt/app/lib/*","com.DSI.springjwt.SpringBootSecurityJwtApplication"]
