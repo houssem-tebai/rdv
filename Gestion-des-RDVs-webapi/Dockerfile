@@ -24,7 +24,7 @@ COPY ./src ./src
 RUN ./mvnw clean install -DskipTests
 
 # Unpacking the jar file and debug step
-RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar) && ls -l target/dependency
+RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../target/*.jar)
 
 # Base image
 FROM eclipse-temurin:17-jre-alpine as runtime
@@ -39,10 +39,7 @@ USER esprit
 ARG DEPENDENCY=/opt/app/target/dependency
 
 # Copy unpacked jar from builder image
-COPY --from=builder ${DEPENDENCY}/META-INF /opt/app/META-INF
-COPY --from=builder ${DEPENDENCY}/application-qa.properties /opt/app/application-qa.properties
-COPY --from=builder ${DEPENDENCY}/application.properties /opt/app/application.properties
-COPY --from=builder ${DEPENDENCY}/com /opt/app/com
+COPY --from=builder ${DEPENDENCY} /opt/app
 
 # Run the application
-ENTRYPOINT ["java","-cp","opt/app:opt/app/lib/*","com.DSI.springjwt.SpringBootSecurityJwtApplication","/opt/app/application-qa.properties"]
+ENTRYPOINT ["java", "-cp", "/opt/app:/opt/app/BOOT-INF/classes:/opt/app/BOOT-INF/lib/*", "com.DSI.springjwt.SpringBootSecurityJwtApplication", "--spring.config.location=/opt/app/application-qa.properties"]
