@@ -5,6 +5,10 @@ services:
     build:
       context: ./Gestion-des-RDVs-webapi
       dockerfile: Dockerfile
+      args:
+        - BUILDKIT_INLINE_CACHE=1
+    environment:
+      - DOCKER_BUILDKIT=1
     ports:
       - "8080:8080"
     depends_on:
