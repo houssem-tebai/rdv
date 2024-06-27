@@ -45,4 +45,4 @@ COPY --from=builder ${DEPENDENCY}/application.properties /opt/app/application.pr
 COPY --from=builder ${DEPENDENCY}/com /opt/app/com
 
 # Run the application
-ENTRYPOINT ["java","-cp","opt/app:opt/app/lib/*","com.DSI.springjwt.SpringBootSecurityJwtApplication"]
+ENTRYPOINT ["java","-cp","opt/app:opt/app/lib/*","com.DSI.springjwt.SpringBootSecurityJwtApplication","/opt/app/application-qa.properties"]
