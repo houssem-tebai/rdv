@@ -7,6 +7,9 @@ LABEL maintainer="Houssem Tebai <houssem.tebai@esprit.tn>"
 # Copy package.json and package-lock.json (or yarn.lock)
 COPY package*.json ./
 
+# Clean npm cache
+RUN npm cache clean --force
+
 # Install dependencies with --legacy-peer-deps flag
 RUN npm install --legacy-peer-deps
 
