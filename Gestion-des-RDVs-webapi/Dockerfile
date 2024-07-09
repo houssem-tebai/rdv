@@ -21,10 +21,13 @@ RUN ./mvnw dependency:go-offline
 COPY ./src ./src
 
 # Install the package to a local repository
-RUN ./mvnw clean install -DskipTests
+RUN ./mvnw clean install -DskipTests && \
+    mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar) && ls -l target/dependency
 
-# Unpacking the jar file and debug step
-RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar) && ls -l target/dependency
+# Copy unpacked jar from builder image
+COPY /opt/app/target/dependency/BOOT-INF/lib /opt/app/lib
+COPY /opt/app/target/dependency/META-INF /opt/app/META-INF
+COPY /opt/app/target/dependency/BOOT-INF/classes /opt/app
 
 # Base image
 FROM eclipse-temurin:17-jre-alpine as runtime
@@ -37,12 +40,6 @@ USER esprit
 
 # Path to unpacked jar from builder image
 ARG DEPENDENCY=/opt/app/target/dependency
-
-# Copy unpacked jar from builder image
-COPY --from=builder ${DEPENDENCY}/BOOT-INF/lib /opt/app/lib
-COPY --from=builder ${DEPENDENCY}/META-INF /opt/app/META-INF
-COPY --from=builder ${DEPENDENCY}/BOOT-INF/classes /opt/app
-
 
 # Run the application
 ENTRYPOINT ["java","-cp","opt/app:opt/app/lib/*","-Dspring.config.location=/opt/app/application-qa.properties","com.DSI.springjwt.SpringBootSecurityJwtApplication"]
